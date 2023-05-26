@@ -1,5 +1,5 @@
 ﻿using ALOrm.Conexao;
-
+using ALOrm.ConfigReflection;
 
 namespace ALOrm.Repositorio
 {

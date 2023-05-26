@@ -1,4 +1,4 @@
-﻿namespace ALOrm.Repositorio
+﻿namespace ALOrm.ConfigReflection
 {
     public static class GerenciadorDePropriedades
     {
