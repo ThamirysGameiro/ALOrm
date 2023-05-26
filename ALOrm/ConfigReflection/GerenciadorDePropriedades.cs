@@ -1,4 +1,6 @@
-﻿namespace ALOrm.ConfigReflection
+﻿using System.Data.Common;
+
+namespace ALOrm.ConfigReflection
 {
     public static class GerenciadorDePropriedades
     {
@@ -25,6 +27,8 @@
                 .ToList();
             _cache.Add(type, propriedades);
             return propriedades;
-        }
+        }       
     }
+
+
 }

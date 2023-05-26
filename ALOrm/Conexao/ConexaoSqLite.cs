@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using ALOrm.ConfigReflection;
+using Microsoft.Data.Sqlite;
+using System.Data;
 using System.Data.Common;
 
 namespace ALOrm.Conexao
@@ -30,7 +32,7 @@ namespace ALOrm.Conexao
             connection.Close();
         }
 
-        private DbDataReader Consultar(string sql)
+        public DataTable Consultar(string sql)
         {   
             using var connection = new SqliteConnection(_stringDeConexao);
             connection.Open();
@@ -38,7 +40,15 @@ namespace ALOrm.Conexao
             command.CommandText = sql;
 
             using var reader = command.ExecuteReader();
-            return reader;
-        }        
+
+            DataTable dt = new DataTable();
+            dt.Load(reader);
+
+            connection.Close();
+
+            return dt;
+        }
+
+       
     }
 }
