@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ALOrm", "ALOrm\ALOrm.csproj", "{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALOrm.Consumidor", "ALOrm.Consumidor\ALOrm.Consumidor.csproj", "{EBA3D001-D505-409F-9E0D-C1AAE3177578}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA3D001-D505-409F-9E0D-C1AAE3177578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA3D001-D505-409F-9E0D-C1AAE3177578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA3D001-D505-409F-9E0D-C1AAE3177578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA3D001-D505-409F-9E0D-C1AAE3177578}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83D5FDC2-61C3-418B-B403-08DAA83893EF}
+	EndGlobalSection
+EndGlobal
