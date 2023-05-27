@@ -5,7 +5,12 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ALOrm", "ALOrm\ALOrm.csproj", "{26DBE681-3F1F-4F5E-928D-A6D782F82FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALOrm.Consumidor", "ALOrm.Consumidor\ALOrm.Consumidor.csproj", "{EBA3D001-D505-409F-9E0D-C1AAE3177578}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ALOrm.Consumidor", "ALOrm.Consumidor\ALOrm.Consumidor.csproj", "{EBA3D001-D505-409F-9E0D-C1AAE3177578}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScriptsSqLite", "ScriptsSqLite", "{465C6B20-3EDC-4F5E-9916-C72B4F11F920}"
+	ProjectSection(SolutionItems) = preProject
+		CriarTabelaPessoa.txt = CriarTabelaPessoa.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
