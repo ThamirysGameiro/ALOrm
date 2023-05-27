@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ALOrm.Consumidor", "ALOrm.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScriptsSqLite", "ScriptsSqLite", "{465C6B20-3EDC-4F5E-9916-C72B4F11F920}"
 	ProjectSection(SolutionItems) = preProject
+		AlterarTabela.txt = AlterarTabela.txt
 		CriarTabelaPessoa.txt = CriarTabelaPessoa.txt
 	EndProjectSection
 EndProject

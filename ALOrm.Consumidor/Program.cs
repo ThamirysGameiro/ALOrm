@@ -4,7 +4,7 @@
 using ALOrm.Consumidor;
 using ALOrm.Repositorio;
 
-var repositorio = new RepositorioBase<Pessoa>();
+using var repositorio = new RepositorioBase<Pessoa>("Data Source=alura.db");
 
 
 var x = repositorio.Incluir(new Pessoa
@@ -34,7 +34,7 @@ repositorio.Incluir(new Pessoa
 
 
 
-var pessoa = repositorio.ConsultarPorId(1);
+var pessoa = repositorio.ConsultarPorChavePrimaria(1);
 if (pessoa is not null)
 {
     Console.WriteLine($"{pessoa.Id} - {pessoa.Nome} - {pessoa.DataDeNascimento} - {pessoa.Ativo}");
@@ -43,7 +43,7 @@ if (pessoa is not null)
 }
 
 
-repositorio.ExcluirPorId(2);
+repositorio.ExcluirPorChavePrimaria(2);
 
 
 var todosOsDados = repositorio.ConsultarTudo();

@@ -1,9 +1,9 @@
 ﻿namespace ALOrm.Atributos
 {
-    public class NomePropriedadeAttribute : Attribute
+    public class NomeColunaAttribute : Attribute
     {
         public string Nome { get; set; }
-        public NomePropriedadeAttribute(string nome)
+        public NomeColunaAttribute(string nome)
         {
             Nome = nome;
         }

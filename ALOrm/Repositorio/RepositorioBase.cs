@@ -1,17 +1,26 @@
 ﻿using ALOrm.Conexao;
 using ALOrm.ConfigReflection;
-using System.Data.Common;
 
 namespace ALOrm.Repositorio
 {
-    public class RepositorioBase<T> where T : class, new()
+    public class RepositorioBase<T>: IDisposable where T : class, new()
     {
+        private readonly string _nomeDaTabela;
+        private readonly string _colunaChavePrimaria;
+        private readonly ConexaoSqLite _conexao;
+        public RepositorioBase(string stringDeConexao)
+        {
+            _nomeDaTabela = MapaEntidade<T>.ObterNomeTabela();
+            _colunaChavePrimaria = MapaEntidade<T>.ObterColunaChavePrimaria();
+            _conexao = new ConexaoSqLite(stringDeConexao);
+
+        }
+        
 
         public T Incluir(T entity)
         {
-            var valorDasPropriedades = GerenciadorDePropriedades.RecuperarValorDasPropriedades(entity);
-             
-            var nomeDaTabela = typeof(T).Name;
+            var valorDasPropriedades = GerenciadorDePropriedades.RecuperarValorDasPropriedades(entity);            
+            
             var colunas = string.Empty;
             var parametrosQuery = string.Empty;
             Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -19,17 +28,17 @@ namespace ALOrm.Repositorio
             for (var i = 0; i < valorDasPropriedades.Count; i++)
             {
                 var propertyValue = valorDasPropriedades[i];
-                parametros.Add($"${propertyValue.Name}", propertyValue.Value);
+                parametros.Add($"${propertyValue.NomeColuna}", propertyValue.Value);
                 
-                colunas += propertyValue.Name;
-                parametrosQuery += $"${propertyValue.Name}";
+                colunas += propertyValue.NomeColuna;
+                parametrosQuery += $"${propertyValue.NomeColuna}";
                 if (i < 0 || i >= valorDasPropriedades.Count - 1) continue;
                 colunas += ",";
                 parametrosQuery += ",";
             }
-            var query = $"INSERT INTO {nomeDaTabela} ({colunas}) VALUES ({parametrosQuery})";
+            var query = $"INSERT INTO {_nomeDaTabela} ({colunas}) VALUES ({parametrosQuery})";
 
-            new ConexaoSqLite().ExecutarComandos(query, parametros);
+            _conexao.ExecutarComandos(query, parametros);
 
             return entity;
         }
@@ -37,63 +46,67 @@ namespace ALOrm.Repositorio
         public T Alterar(T entity)
         {
             var valorDasPropriedades = GerenciadorDePropriedades.RecuperarValorDasPropriedades(entity);
-
-            var nomeDaTabela = typeof(T).Name;
-            var colunas = string.Empty;
-            var parametrosQuery = string.Empty;
+            var colunas = string.Empty;            
             Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-            object? id = null;
-
-
+                        
             for (var i = 0; i < valorDasPropriedades.Count; i++)
             {
                 var propertyValue = valorDasPropriedades[i];
-                if (propertyValue.IsId)
-                    id = propertyValue.Value;
 
-                parametros.Add($"${propertyValue.Name}", propertyValue.Value);
-                colunas += $"{propertyValue.Name} = ${propertyValue.Name}";
-                if (i < 0 || i >= valorDasPropriedades.Count - 1) continue;
-                colunas += ",";
+                parametros.Add($"${propertyValue.NomeColuna}", propertyValue.Value);
+
+
+                if (!propertyValue.IsId)
+                {
+                    colunas += $"{propertyValue.NomeColuna} = ${propertyValue.NomeColuna}";
+                    if (i < 0 || i >= valorDasPropriedades.Count - 1) continue;
+                    colunas += ",";
+                }
+               
             }
-            var query = $"UPDATE {nomeDaTabela} SET {colunas} WHERE ID = {id}";
+            var query = $"UPDATE {_nomeDaTabela} SET {colunas} WHERE {_colunaChavePrimaria} = ${_colunaChavePrimaria}";
 
-            new ConexaoSqLite().ExecutarComandos(query, parametros);
+            _conexao.ExecutarComandos(query, parametros);
 
             return entity;
         }
 
         public IReadOnlyList<T> ConsultarTudo()
-        {
-            var nomeDaTabela = typeof(T).Name;
-            var query = $"SELECT * FROM {nomeDaTabela}";
+        {            
+            var query = $"SELECT * FROM {_nomeDaTabela}";
 
-            var dados = new ConexaoSqLite().Consultar(query);
+            var dados = _conexao.Consultar(query);
             
             return MapaEntidade<T>.MapearEntidades(dados);
         }
 
-        public T? ConsultarPorId(int id)
-        {
-            var nomeDaTabela = typeof(T).Name;
-            var query = $"SELECT * FROM {nomeDaTabela} WHERE Id = {id}";
+        public T? ConsultarPorChavePrimaria<K>(K valorChavePrimaria)
+        {            
+            var query = $"SELECT * FROM {_nomeDaTabela} WHERE {_colunaChavePrimaria} = ${_colunaChavePrimaria}";
 
-            var dados = new ConexaoSqLite().Consultar(query);
+            Dictionary<string, object> parametros = new Dictionary<string, object>();
+            parametros.Add($"${_colunaChavePrimaria}", valorChavePrimaria);
+
+            var dados = _conexao.Consultar(query, parametros);
 
             return MapaEntidade<T>.MapearEntidades(dados).FirstOrDefault();
         }
 
 
-        public void ExcluirPorId(int id)
+        public void ExcluirPorChavePrimaria<K>(K valorChavePrimaria)
         {
-            var nomeDaTabela = typeof(T).Name;
-            
-            var query = $"DELETE FROM {nomeDaTabela} WHERE Id = {id}";
-            new ConexaoSqLite().ExecutarComandos(query, new Dictionary<string, object>());
+            var query = $"DELETE FROM {_nomeDaTabela} WHERE {_colunaChavePrimaria} = ${_colunaChavePrimaria}";
+
+            Dictionary<string, object> parametros = new Dictionary<string, object>();
+            parametros.Add($"${_colunaChavePrimaria}", valorChavePrimaria);
+
+
+            _conexao.ExecutarComandos(query, parametros);
         }
 
-        
-
+        public void Dispose()
+        {
+            _conexao.Dispose();
+        }
     }
 }

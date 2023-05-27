@@ -1,0 +1,5 @@
+ALTER TABLE Pessoa
+  RENAME TO tb_pessoa;
+  
+ALTER TABLE tb_pessoa
+RENAME COLUMN DataDeNascimento TO dt_nasc;

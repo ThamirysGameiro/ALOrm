@@ -1,26 +1,22 @@
-﻿using ALOrm.ConfigReflection;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System.Data;
-using System.Data.Common;
 
 namespace ALOrm.Conexao
 {
-    public class ConexaoSqLite
+    public class ConexaoSqLite: IDisposable
     {
-        private readonly string _stringDeConexao;
-
-        public ConexaoSqLite()
+        
+        private SqliteConnection _connection;
+        public ConexaoSqLite(string stringDeConexao)
         {
-            _stringDeConexao = "Data Source=alura.db";
+            _connection = new SqliteConnection(stringDeConexao);
+            _connection.Open();
 
         }
 
         public void ExecutarComandos(string query, Dictionary<string, object> parametros)
         {
-            using var connection = new SqliteConnection(_stringDeConexao);
-            connection.Open();
-
-            var command = connection.CreateCommand();
+            var command = _connection.CreateCommand();
             command.CommandText = query;
 
             foreach (var param in parametros)
@@ -28,27 +24,44 @@ namespace ALOrm.Conexao
                 command.Parameters.AddWithValue(param.Key, param.Value);
             }
 
-            command.ExecuteNonQuery();
-            connection.Close();
+            command.ExecuteNonQuery();            
         }
 
         public DataTable Consultar(string sql)
-        {   
-            using var connection = new SqliteConnection(_stringDeConexao);
-            connection.Open();
-            var command = connection.CreateCommand();
+        {  
+            var command = _connection.CreateCommand();
             command.CommandText = sql;
+
+            using var reader = command.ExecuteReader();
+
+            DataTable dt = new DataTable();
+            dt.Load(reader);            
+
+            return dt;
+        }
+
+        public DataTable Consultar(string sql, Dictionary<string, object> parametros)
+        {   
+            var command = _connection.CreateCommand();
+            command.CommandText = sql;
+
+            foreach (var param in parametros)
+            {
+                command.Parameters.AddWithValue(param.Key, param.Value);
+            }
 
             using var reader = command.ExecuteReader();
 
             DataTable dt = new DataTable();
             dt.Load(reader);
 
-            connection.Close();
-
             return dt;
         }
 
-       
+        public void Dispose()
+        {
+            if(_connection.State != ConnectionState.Closed)
+                _connection.Close();
+        }
     }
 }
