@@ -1,0 +1,7 @@
+CREATE TABLE Pessoa (
+   Id               INTEGER   PRIMARY KEY
+                              NOT NULL,
+   Nome             TEXT (80) NOT NULL,
+   DataDeNascimento TEXT      NOT NULL,
+   Ativo            INTEGER   NOT NULL
+);
